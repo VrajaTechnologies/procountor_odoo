@@ -2,24 +2,27 @@
 {
 
     # App information
-    'name': 'Procountor Odoo Connector ',
-    'category': 'Website',
+    'name': 'Procountor Odoo Connector',
+    'category': 'Accounting',
     'version': '1.0.0',
-    'summary': """""",
+    'summary': """Procountor Odoo Connector
+    """,
     'license': 'OPL-1',
 
     # Dependencies
-    'depends': ['delivery'],
+    'depends': ['account'],
 
     # Views
     'data': [
         'security/ir.model.access.csv',
         'views/procountor_instance.xml',
+        'views/procountor_log.xml',
+        'views/res_partner.xml',
         'views/menu_item.xml',
-
     ],
+
     # Odoo Store Specific
-    'images': ['static/description/cover.jpg'],
+    'images': [],
 
     # Author
     'author': 'Vraja Technologies',

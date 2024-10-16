@@ -11,20 +11,48 @@ class ProcountorInstance(models.Model):
     _name = 'procountor.instance'
     _description = 'Procountor Instance'
 
-    name = fields.Char(string='Name', help='Enter Instance Name', copy=False, tracking=True)
-    procountor_api_url = fields.Char(string="API URL", copy=False, tracking=True,
-                                     default="https://pts-procountor.pubdev.azure.procountor.com/api",
-                                     help="Please enter your api key of procountor account")
-    procountor_client_id = fields.Char(string="Client ID", copy=False, tracking=True,
-                                       help='Please enter your client id of procountor account')
-    procountor_client_secret = fields.Char(string="Client Secret", copy=False, tracking=True,
-                                           help='Please enter your client secret of procountor account')
-    procountor_redirect_url = fields.Char(string="Redirect URL", copy=False, tracking=True,
-                                          help='Please enter your redirect url which is enter by you while register account')
-    procountor_api_key = fields.Char(string="API Key", copy=False, tracking=True,
-                                     help="Please enter your api key of procountor account")
-    procountor_api_access_token = fields.Char(string="Access Token", copy=False,
-                                              help="This field shows api access token,Access tokens are used to authorize calls to API endpoints.")
+    name = fields.Char(
+        string='Name',
+        help='Enter Instance Name',
+        copy=False,
+        tracking=True
+    )
+    procountor_api_url = fields.Char(
+        string="API URL",
+        default="https://pts-procountor.pubdev.azure.procountor.com/api",
+        help="Please enter API URL of your procountor account",
+        copy=False,
+        tracking=True,
+    )
+    procountor_client_id = fields.Char(
+        string="Client ID",
+        help='Please enter Client ID of your procountor account',
+        copy=False,
+        tracking=True
+    )
+    procountor_client_secret = fields.Char(
+        string="Client Secret",
+        help='Please enter Client Secret of your procountor account',
+        copy=False,
+        tracking=True
+    )
+    procountor_redirect_url = fields.Char(
+        string="Redirect URL",
+        help='Please enter Redirect URL which is enter by you while register account',
+        copy=False,
+        tracking=True
+    )
+    procountor_api_key = fields.Char(
+        string="API Key",
+        help="Please enter API Key of your procountor account",
+        copy=False,
+        tracking=True
+    )
+    procountor_api_access_token = fields.Char(
+        string="Access Token",
+        help="This field shows api access token, Access tokens are used to authorize calls to API endpoints.",
+        copy=False
+    )
 
     @api.model_create_multi
     def create(self, vals):
@@ -32,10 +60,14 @@ class ProcountorInstance(models.Model):
         In this method auto generated cron added at the time of instance creation.
         """
         instance = super(ProcountorInstance, self).create(vals)
+        instance.generate_procountor_access_token()
         instance.generate_procountor_access_token_using_cron()
         return instance
 
     def procountor_api_calling(self, request_type, api_url, request_data, header):
+        """
+        This method is used to call API.
+        """
         _logger.info("Request API Header:::: %s" % header)
         _logger.info("Request API URL:::: %s" % api_url)
         _logger.info("Request API Data:::: %s" % request_data)
@@ -48,9 +80,9 @@ class ProcountorInstance(models.Model):
             return False, response_data.text
 
     def setup_procountor_automation_cron(self, cron_name, model_name, code_method, interval_number=10,
-                                        interval_type='minutes', numbercall=1, nextcall_timegap_minutes=10):
+                                         interval_type='minutes', numbercall=1, nextcall_timegap_minutes=10):
         """
-        This method is used for create cron record.
+        This method is used to create cron record.
         """
         self.env['ir.cron'].create({
             'name': cron_name,
@@ -61,16 +93,15 @@ class ProcountorInstance(models.Model):
             'interval_type': interval_type,
             'numbercall': numbercall,
             'nextcall': datetime.now() + timedelta(minutes=nextcall_timegap_minutes),
-            'doall': True,
-            'shopify_instance': self.id
+            'procountor_instance': self.id
         })
         return True
 
-    def procountor_generate_access_token_cron(self,instance):
+    def procountor_generate_access_token_cron(self, instance):
         try:
             instance.generate_procountor_access_token()
         except Exception as e:
-            _logger.info("Getting an error in Generate Token request Odoo to VASP: {0}".format(e))
+            _logger.info("Getting an error in Generate Access Token: {0}".format(e))
 
     def generate_procountor_access_token_using_cron(self):
         code_method = 'model.procountor_generate_access_token_cron({0})'.format(self.id)
@@ -80,12 +111,11 @@ class ProcountorInstance(models.Model):
         cron_name = "Procountor: [{0}] generate access token automatically".format(self.name)
         model_name = 'procountor.instance'
         self.setup_procountor_automation_cron(cron_name, model_name, code_method,
-                                             interval_type='minutes', interval_number=55,
-                                             numbercall=-1, nextcall_timegap_minutes=20)
+                                              interval_type='minutes', interval_number=55,
+                                              numbercall=-1, nextcall_timegap_minutes=20)
         return True
 
-
-    def generate_procountor_access_token(self,instance = False):
+    def generate_procountor_access_token(self, instance=False):
         try:
             instance = instance if instance else self
             api_url = "{0}/oauth/token".format(instance.procountor_api_url)
@@ -103,3 +133,12 @@ class ProcountorInstance(models.Model):
                 raise ValidationError(response_data)
         except Exception as e:
             raise ValidationError(e)
+
+    def unlink(self):
+        """
+        This method is used to delete related scheduled actions to particular instance.
+        """
+        cron_records = self.env['ir.cron'].search([('procountor_instance', 'in', self.ids)])
+        if cron_records:
+            cron_records.unlink()
+        return super(ProcountorInstance, self).unlink()

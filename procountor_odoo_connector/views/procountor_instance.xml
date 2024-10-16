@@ -19,7 +19,7 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="procountor_test_connection" string="Test Procountor Connection"
+                        <button name="generate_procountor_access_token" string="Generate Access Token"
                                 class="oe_highlight"
                                 type="object"/>
                     </header>
