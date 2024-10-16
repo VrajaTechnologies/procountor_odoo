@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_procountor_instance,procountor_instance_,model_procountor_instance,base.group_user,1,1,1,1
 access_procountor_log,procountor_log,model_procountor_log,base.group_user,1,1,1,1
 access_procountor_log_line,procountor_log_line,model_procountor_log_line,base.group_user,1,1,1,1
+access_export_customer_to_procountor,export_customer_to_procountor,model_export_customer_to_procountor,base.group_user,1,1,1,1

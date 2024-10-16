@@ -99,7 +99,8 @@ class ProcountorInstance(models.Model):
 
     def procountor_generate_access_token_cron(self, instance):
         try:
-            instance.generate_procountor_access_token()
+            instance_record = self.env['procountor.instance'].browse(instance)
+            instance_record.generate_procountor_access_token()
         except Exception as e:
             _logger.info("Getting an error in Generate Access Token: {0}".format(e))
 

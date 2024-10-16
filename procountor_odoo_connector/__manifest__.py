@@ -18,6 +18,7 @@
         'views/procountor_instance.xml',
         'views/procountor_log.xml',
         'views/res_partner.xml',
+        'wizard/export_customer_to_procountor.xml'
         'views/menu_item.xml',
     ],
 
