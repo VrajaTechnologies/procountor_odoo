@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <!-- Main menu -->
+        <menuitem id="procountor_instance"
+                  name="Procountor Connector"
+                  action="action_procountor_instance"
+                  web_icon="procountor_odoo_connector,static/description/icon.png"/>
+    </data>
+</odoo>
