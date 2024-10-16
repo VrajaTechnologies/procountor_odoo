@@ -68,7 +68,7 @@ class ProcountorInstance(models.Model):
 
     def procountor_generate_access_token_cron(self,instance):
         try:
-            instance.procountor_test_connection()
+            instance.generate_procountor_access_token()
         except Exception as e:
             _logger.info("Getting an error in Generate Token request Odoo to VASP: {0}".format(e))
 
@@ -85,9 +85,9 @@ class ProcountorInstance(models.Model):
         return True
 
 
-    def procountor_test_connection(self,instance = False):
+    def generate_procountor_access_token(self,instance = False):
         try:
-            instance =instance if instance else self
+            instance = instance if instance else self
             api_url = "{0}/oauth/token".format(instance.procountor_api_url)
             payload = 'grant_type=client_credentials&client_id={0}&client_secret={1}&redirect_uri={2}&api_key={3}'.format(
                 instance.procountor_client_id, instance.procountor_client_secret, instance.procountor_redirect_url,
