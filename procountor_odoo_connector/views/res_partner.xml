@@ -12,6 +12,7 @@
                             <field name="procountor_customer_id" readonly="1"/>
                             <field name="procountor_instance_id" readonly="1"/>
                             <field name="procountor_payment_method" readonly="0"/>
+                            <field name="procountor_customer_type" readonly="0"/>
                         </group>
                     </page>
                 </xpath>
