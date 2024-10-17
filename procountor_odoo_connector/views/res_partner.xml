@@ -18,9 +18,7 @@
             </field>
         </record>
 
-        <!--        Action for export customer-->
-
-
+        <!-- Action for export customer-->
         <record id="action_wizard_export_customer_to_procountor" model="ir.actions.act_window">
             <field name="name">Export Customer To Procountor</field>
             <field name="res_model">export.customer.to.procountor</field>
@@ -29,12 +27,13 @@
             <field name="binding_model_id" ref="model_res_partner"/>
             <field name="binding_view_types">list,form</field>
         </record>
-        <!-- Action -->
+
+        <!-- Action for a customer menu in instance -->
         <record id="procountor_res_partner_action" model="ir.actions.act_window">
-            <field name="name">Procountor Res Partner</field>
+            <field name="name">Procountor Partner</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">res.partner</field>
-<!--            <field name="domain">[('procountor_instance_id', '!=', False)]</field>-->
+            <field name="domain">[('procountor_instance_id', '!=', False)]</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">

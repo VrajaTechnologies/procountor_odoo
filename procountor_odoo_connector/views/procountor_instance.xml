@@ -1,18 +1,30 @@
 <odoo>
     <data>
-        <record id="action_procountor_instance" model="ir.actions.act_window">
-            <field name="name">Procountor Instance</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">procountor.instance</field>
-            <field name='view_mode'>kanban,tree,form</field>
+        <record id="action_procountor_customer_id" model="ir.actions.act_window">
+            <field name="name">Procountor Customer</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="domain">[('procountor_instance_id', '=', active_id)]</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                    Create a Procountor Instance
+                    Procountor Customer will display here
                 </p>
             </field>
         </record>
 
-        <!--        Form View-->
+        <record id="action_procountor_invoice_id" model="ir.actions.act_window">
+            <field name="name">Procountor Invoice</field>
+            <field name="res_model">account.move</field>
+            <field name="view_id" ref="account.view_out_invoice_tree"/>
+            <field name="domain">[('procountor_instance_id', '=', active_id)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Procountor Invoices will display here
+                </p>
+            </field>
+        </record>
+
+        <!-- Form View-->
         <record id="procountor_instance_form" model="ir.ui.view">
             <field name="name">Procountor instance form</field>
             <field name="model">procountor.instance</field>
@@ -24,13 +36,39 @@
                                 type="object"/>
                     </header>
                     <sheet>
+                        <field name="active" invisible="1"/>
+                        <widget name="web_ribbon" text="Archived" bg_color="bg-danger"
+                                invisible="active == True"/>
+                        <div name="button_box" position="inside">
+                            <button class="oe_stat_button" type="action"
+                                    name="%(procountor_odoo_connector.action_procountor_cron_id)d"
+                                    string="Cron"
+                                    icon="fa-clock-o"/>
+                            <button class="oe_stat_button" type="action"
+                                    name="%(procountor_odoo_connector.action_procountor_log_instance_id)d"
+                                    string="Logs"
+                                    icon="fa-bitbucket-square"/>
+                            <button class="oe_stat_button" type="action"
+                                    name="%(procountor_odoo_connector.action_procountor_customer_id)d"
+                                    string="Customers"
+                                    icon="fa-users"/>
+                            <button class="oe_stat_button" type="action"
+                                    name="%(procountor_odoo_connector.action_procountor_invoice_id)d" string="Invoices"
+                                    icon="fa-list-ul"/>
+                        </div>
+                        <field name="image" widget="image" class="oe_avatar"/>
                         <div class="oe_title">
                             <h1>
                                 <field name="name" placeholder="e.g. Procountor Instance Name..." required="1"/>
                             </h1>
                         </div>
+                        <group>
+                            <group>
+                                <field name="company_id" required="1"/>
+                            </group>
+                        </group>
                         <notebook name="Notebook">
-                            <page name="procountor_credential" string="Procountor Credential">
+                            <page name="procountor_credential" string="Procountor Credentials">
                                 <group>
                                     <group>
                                         <field name="procountor_api_url" string="Procountor API URL/Host" required="1"/>
@@ -45,6 +83,93 @@
                         </notebook>
                     </sheet>
                 </form>
+            </field>
+        </record>
+
+        <!-- tree view-->
+        <record id="procountor_instance_integration_tree" model="ir.ui.view">
+            <field name="name">procountor_instance_integration_tree</field>
+            <field name="model">procountor.instance</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" string="Instance Name"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--kanban view-->
+        <record id="procountor_instance_kanban" model="ir.ui.view">
+            <field name="name">procountor.instance.kanban</field>
+            <field name="model">procountor.instance</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_account_kanban">
+                    <field name="name"/>
+                    <field name="procountor_api_url"/>
+                    <field name="procountor_client_id"/>
+                    <field name="procountor_client_secret"/>
+                    <field name="procountor_redirect_url"/>
+                    <field name="image"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click" style="border-radius: 10px;">
+                                <div t-attf-class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <img class="oe_kanban_avatar img-fluid" style="height:100px;width:100px;"
+                                                 t-att-src="kanban_image('procountor.instance', 'image', record.id.raw_value)"/>
+
+                                            <span>&#160;&#160;</span>
+                                            <a type="object" name="action_procountor_open_instance_view_form">
+                                                <field name="name"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container o_kanban_card_content fa-2x">
+                                    <div class="row mt10">
+                                        <div class="col-4 border-right">
+                                            <a name="%(procountor_odoo_connector.procountor_res_partner_action)d"
+                                               type="action"
+                                               class="d-flex flex-column align-items-center">
+                                                <span class="fa-stack fa-lg" title="Customer">
+                                                    <i class="fa fa-square-o fa-stack-2x"/>
+                                                    <i class="fa fa-users fa-stack-1x"/>
+                                                </span>
+                                                <span class="text-muted">Customers</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-4 border-right">
+                                            <a name="%(procountor_odoo_connector.action_procountor_invoice_id)d"
+                                               type="action"
+                                               class="d-flex flex-column align-items-center">
+                                                <span class="fa-stack fa-lg" title="Orders">
+                                                    <i class="fa fa-square-o fa-stack-2x"/>
+                                                    <i class="fa fa-line-chart fa-stack-1x"/>
+                                                </span>
+                                                <span class="text-muted">Invoices</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                    <field name="id" invisible="True"/>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="action_procountor_instance" model="ir.actions.act_window">
+            <field name="name">Procountor Instance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">procountor.instance</field>
+            <field name='view_mode'>kanban,tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a Procountor Instance
+                </p>
             </field>
         </record>
     </data>

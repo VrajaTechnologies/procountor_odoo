@@ -8,7 +8,7 @@ class SalesOrder(models.Model):
                                          help="This is just a reference of procountor customer identifier",
                                          tracking=True)
     procountor_instance_id = fields.Many2one('procountor.instance', string="Procountor Instance",
-                                             help="This field show the instance details of shopify", tracking=True)
+                                             help="This field show the instance details of Procountor", tracking=True)
     procountor_payment_method = fields.Selection([('BANK_TRANSFER', 'BANK_TRANSFER'),
                                                   ('DIRECT_DEBIT', 'DIRECT_DEBIT'),
                                                   ('DIRECT_PAYMENT', 'DIRECT_PAYMENT'),

@@ -15,10 +15,11 @@
     # Views
     'data': [
         'security/ir.model.access.csv',
-        'views/procountor_instance.xml',
+        'views/ir_cron.xml',
         'views/procountor_log.xml',
         'views/res_partner.xml',
-        'wizard/export_customer_to_procountor.xml'
+        'wizard/export_customer_to_procountor.xml',
+        'views/procountor_instance.xml',
         'views/menu_item.xml',
     ],
 

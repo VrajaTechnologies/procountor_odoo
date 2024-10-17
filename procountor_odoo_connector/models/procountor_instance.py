@@ -17,6 +17,20 @@ class ProcountorInstance(models.Model):
         copy=False,
         tracking=True
     )
+    active = fields.Boolean(
+        string='Active',
+        copy=False,
+        tracking=True,
+        default=True
+    )
+    image = fields.Binary(
+        string="Image",
+        help="Select Image."
+    )
+    company_id = fields.Many2one(
+        comodel_name='res.company',
+        string='Company'
+    )
     procountor_api_url = fields.Char(
         string="API URL",
         default="https://pts-procountor.pubdev.azure.procountor.com/api",
@@ -143,3 +157,17 @@ class ProcountorInstance(models.Model):
         if cron_records:
             cron_records.unlink()
         return super(ProcountorInstance, self).unlink()
+
+    def action_procountor_open_instance_view_form(self):
+        form_id = self.sudo().env.ref('procountor_odoo_connector.procountor_instance_form')
+        action = {
+            'name': _('Procountor Instance'),
+            'view_id': False,
+            'res_model': 'procountor.instance',
+            'context': self._context,
+            'view_mode': 'form',
+            'res_id': self.id,
+            'views': [(form_id.id, 'form')],
+            'type': 'ir.actions.act_window',
+        }
+        return action

@@ -137,17 +137,17 @@
             </field>
         </record>
 
-<!--        <record id="action_procountor_log_instance_id" model="ir.actions.act_window">-->
-<!--            <field name="name">Procountor Log Instance</field>-->
-<!--            <field name="res_model">procountor.log</field>-->
-<!--            <field name="view_id" ref="view_procountor_log_tree_view"/>-->
-<!--            <field name="domain">[('instance_id', '=', active_id)]</field>-->
-<!--            <field name="help" type="html">-->
-<!--                <p class="o_view_nocontent_smiling_face">-->
-<!--                    Procountor Logs will display here-->
-<!--                </p>-->
-<!--            </field>-->
-<!--        </record>-->
+        <record id="action_procountor_log_instance_id" model="ir.actions.act_window">
+            <field name="name">Procountor Log Instance</field>
+            <field name="res_model">procountor.log</field>
+            <field name="view_id" ref="view_procountor_log_tree_view"/>
+            <field name="domain">[('instance_id', '=', active_id)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Procountor Logs will display here
+                </p>
+            </field>
+        </record>
 
         <!-- action log line-->
         <record id="action_procountor_log_line" model="ir.actions.act_window">
