@@ -12,6 +12,7 @@
                             <field name="procountor_customer_id" readonly="1"/>
                             <field name="procountor_instance_id" readonly="1"/>
                             <field name="procountor_payment_method" readonly="0"/>
+                            <field name="procountor_customer_type" readonly="0"/>
                         </group>
                     </page>
                 </xpath>
@@ -34,7 +35,7 @@
             <field name="name">Procountor Res Partner</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">res.partner</field>
-<!--            <field name="domain">[('procountor_instance_id', '!=', False)]</field>-->
+            <!--            <field name="domain">[('procountor_instance_id', '!=', False)]</field>-->
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
