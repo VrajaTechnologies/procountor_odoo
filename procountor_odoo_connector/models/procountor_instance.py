@@ -9,6 +9,7 @@ _logger = logging.getLogger("Procountor")
 
 class ProcountorInstance(models.Model):
     _name = 'procountor.instance'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Procountor Instance'
 
     name = fields.Char(
@@ -66,6 +67,16 @@ class ProcountorInstance(models.Model):
         string="Access Token",
         help="This field shows api access token, Access tokens are used to authorize calls to API endpoints.",
         copy=False
+    )
+    last_product_synced_date = fields.Datetime(
+        string="Last Product Synced Date",
+        copy=False,
+        tracking=True
+    )
+    last_synced_customer_date = fields.Datetime(
+        string='Last Customer Synced Date',
+        copy=False,
+        tracking=True
     )
 
     @api.model_create_multi
@@ -131,15 +142,15 @@ class ProcountorInstance(models.Model):
         return True
 
     def generate_procountor_access_token(self, instance=False):
+        instance = instance if instance else self
+        api_url = "{0}/oauth/token".format(instance.procountor_api_url)
+        payload = 'grant_type=client_credentials&client_id={0}&client_secret={1}&redirect_uri={2}&api_key={3}'.format(
+            instance.procountor_client_id, instance.procountor_client_secret, instance.procountor_redirect_url,
+            instance.procountor_api_key)
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
         try:
-            instance = instance if instance else self
-            api_url = "{0}/oauth/token".format(instance.procountor_api_url)
-            payload = 'grant_type=client_credentials&client_id={0}&client_secret={1}&redirect_uri={2}&api_key={3}'.format(
-                instance.procountor_client_id, instance.procountor_client_secret, instance.procountor_redirect_url,
-                instance.procountor_api_key)
-            headers = {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
             response_status, response_data = instance.procountor_api_calling("POST", api_url, payload, headers)
 
             if response_status and response_data and response_data.get('access_token'):

@@ -32,8 +32,7 @@
                 <form>
                     <header>
                         <button name="generate_procountor_access_token" string="Generate Access Token"
-                                class="oe_highlight"
-                                type="object"/>
+                                class="oe_highlight" type="object"/>
                     </header>
                     <sheet>
                         <field name="active" invisible="1"/>
@@ -70,18 +69,21 @@
                         <notebook name="Notebook">
                             <page name="procountor_credential" string="Procountor Credentials">
                                 <group>
-                                    <group>
-                                        <field name="procountor_api_url" string="Procountor API URL/Host" required="1"/>
-                                        <field name="procountor_client_id" required="1"/>
-                                        <field name="procountor_client_secret" required="1"/>
-                                        <field name="procountor_redirect_url" required="1"/>
-                                        <field name="procountor_api_key" required="1"/>
-                                        <field name="procountor_api_access_token" readonly="1"/>
-                                    </group>
+                                    <field name="procountor_api_url" string="Procountor API URL/Host" required="1"/>
+                                    <field name="procountor_client_id" required="1"/>
+                                    <field name="procountor_client_secret" required="1"/>
+                                    <field name="procountor_redirect_url" required="1"/>
+                                    <field name="procountor_api_key" required="1"/>
+                                    <field name="procountor_api_access_token" readonly="1"/>
                                 </group>
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -151,7 +153,28 @@
                                             </a>
                                         </div>
                                     </div>
-
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button name="%(procountor_odoo_connector.actions_procountor_operations)d"
+                                                    type="action" string="Operations" class="btn-primary"
+                                                    t-attf-style="border-radius: 12px;">
+                                                <span>
+                                                    <i class="fa fa-hand-o-right fa-1x" aria-hidden="true"/>
+                                                    Operations
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div class="col-6" align="right">
+                                            <button name="%(procountor_odoo_connector.action_procountor_log_instance_id)d"
+                                                    type="action" string="Logs" class="btn-primary"
+                                                    t-attf-style="border-radius: 12px;">
+                                                <span>
+                                                    <i class="fa fa-book fa-1x" aria-hidden="true"/>
+                                                    Logs
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </t>

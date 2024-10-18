@@ -3,3 +3,5 @@ access_procountor_instance,procountor_instance_,model_procountor_instance,base.g
 access_procountor_log,procountor_log,model_procountor_log,base.group_user,1,1,1,1
 access_procountor_log_line,procountor_log_line,model_procountor_log_line,base.group_user,1,1,1,1
 access_export_customer_to_procountor,export_customer_to_procountor,model_export_customer_to_procountor,base.group_user,1,1,1,1
+access_procountor_operations,procountor_operations,model_procountor_operations,base.group_user,1,1,1,1
+access_procountor_product_listing,procountor_product_listing,model_procountor_product_listing,base.group_user,1,1,1,1

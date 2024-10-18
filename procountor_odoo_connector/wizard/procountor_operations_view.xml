@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- procountor Operations Form-->
+        <record id="procountor_operations_form_view" model="ir.ui.view">
+            <field name="name">procountor operations form view</field>
+            <field name="model">procountor.operations</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <p style="background-color:powderblue; padding: 10px;"
+                           invisible="import_operations != 'import_product'">
+                            <b>Notes: Import Product Process</b>
+                            <ul>
+                                <br/>
+                                <li>
+                                    To Import Products From Procountor Based on From and To Date, It will Create
+                                    Product Inside odoo.
+                                </li>
+                                <li>
+                                    If any Issue in Process of Product Import We manage the Logs.
+                                </li>
+                            </ul>
+                            <p>
+                                <b>Notes: Import Product By - Remote IDs</b>
+                                <ul>
+                                    <br/>
+                                    <li>
+                                        To Import Products Based on Specify Procountor IDs
+                                        Example of Enter procountor product template ids:
+                                        4341100314679,4341100314680,4341100314678,4341100314658
+                                    </li>
+                                    <li>
+                                        Once User Enter the Procountor Product IDs It will Create the Product inside Odoo.
+                                    </li>
+                                    <li>
+                                        Please Enter procountor product ids with comma separated values without
+                                        any
+                                        quotes.
+                                    </li>
+                                </ul>
+                            </p>
+                        </p>
+                        <p style="background-color:powderblue; padding: 10px;"
+                           invisible="import_operations != 'import_customers'">
+                            <b>Notes: Import Customer</b>
+                            <ul>
+                                <br/>
+                                <li>
+                                    To Import Customers From Procountor, It will Create Customer Inside odoo.
+                                </li>
+                            </ul>
+                        </p>
+                        <br/>
+                        <group>
+                            <group>
+                                <field name="instance_id"/>
+                                <field name="procountor_operation" widget="radio"/>
+                                <field name="import_operations" widget="radio"/>
+                            </group>
+                            <group>
+                                <!-- Import Product fields -->
+                                <field name="from_date_product"
+                                       required="import_operations == 'import_product'"
+                                       invisible="procountor_operation != 'import' or import_operations != 'import_product'"/>
+                                <field name="to_date_product"
+                                       required="import_operations == 'import_product'"
+                                       invisible="procountor_operation != 'import' or import_operations != 'import_product'"/>
+                                <field name="procountor_product_ids"
+                                       invisible="procountor_operation != 'import' or import_operations != 'import_product'"/>
+                                />
+                            </group>
+                        </group>
+                        <footer>
+                            <button string="Execute" class="oe_highlight" type="object"
+                                    name="execute_process_of_procountor"/>
+                            <button string="Cancel" class="oe_highlight" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="actions_procountor_operations" model="ir.actions.act_window">
+            <field name="name">Procountor Operations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">procountor.operations</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="procountor_operations_form_view"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>
+
+
