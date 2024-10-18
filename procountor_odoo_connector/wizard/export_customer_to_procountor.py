@@ -42,7 +42,7 @@ class ExportCustomerToProcountor(models.TransientModel):
             lambda x: x.type == 'contact')
         payload = {
             "name": customer_id.name or '',
-            "type": customer_id.procountor_customer_type or '',
+            "type": "CUSTOMER",
             "address": self.prepare_customer_info(customer_id),
             "billingAddress": self.prepare_customer_info(
                 customer_invoice_address[0] if customer_invoice_address else customer_id),
@@ -52,7 +52,7 @@ class ExportCustomerToProcountor(models.TransientModel):
                 "email": customer_id.email or '',
             },
             "paymentInfo": {
-                "paymentMethod": customer_id.procountor_payment_method,
+                "paymentMethod": customer_id.procountor_payment_method or '',
                 "bankAccount": customer_id.bank_ids and customer_id.bank_ids.mapped('acc_number')[0] or '',
                 "currency": customer_id.currency_id.name if customer_id.currency_id else customer_id.property_product_pricelist.currency_id.name
             },
