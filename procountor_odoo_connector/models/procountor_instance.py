@@ -182,3 +182,7 @@ class ProcountorInstance(models.Model):
             'type': 'ir.actions.act_window',
         }
         return action
+
+    def import_customer_procountor_to_odoo(self):
+        pass
+
