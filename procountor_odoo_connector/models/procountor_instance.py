@@ -93,7 +93,6 @@ class ProcountorInstance(models.Model):
         """
         This method is used to call API.
         """
-        _logger.info("Request API Header:::: %s" % header)
         _logger.info("Request API URL:::: %s" % api_url)
         _logger.info("Request API Data:::: %s" % request_data)
         response_data = requests.request(method=request_type, url=api_url, headers=header, data=request_data)
@@ -102,7 +101,7 @@ class ProcountorInstance(models.Model):
             _logger.info(">>> Response Data {}".format(response_data))
             return True, response_data
         else:
-            return False, response_data.text
+            return False, response_data
 
     def setup_procountor_automation_cron(self, cron_name, model_name, code_method, interval_number=10,
                                          interval_type='minutes', numbercall=1, nextcall_timegap_minutes=10):

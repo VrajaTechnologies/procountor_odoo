@@ -29,7 +29,7 @@
                                     <li>
                                         To Import Products Based on Specify Procountor IDs
                                         Example of Enter procountor product template ids:
-                                        4341100314679,4341100314680,4341100314678,4341100314658
+                                        2170456,2170843,2170849,2170856
                                     </li>
                                     <li>
                                         Once User Enter the Procountor Product IDs It will Create the Product inside Odoo.
