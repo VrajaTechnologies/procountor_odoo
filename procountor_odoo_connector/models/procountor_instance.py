@@ -102,8 +102,7 @@ class ProcountorInstance(models.Model):
             _logger.info(">>> Response Data {}".format(response_data))
             return True, response_data
         else:
-            return False, response_data.text
-
+            return False, response_data.json()
     def setup_procountor_automation_cron(self, cron_name, model_name, code_method, interval_number=10,
                                          interval_type='minutes', numbercall=1, nextcall_timegap_minutes=10):
         """
@@ -182,7 +181,3 @@ class ProcountorInstance(models.Model):
             'type': 'ir.actions.act_window',
         }
         return action
-
-    def import_customer_procountor_to_odoo(self):
-        pass
-

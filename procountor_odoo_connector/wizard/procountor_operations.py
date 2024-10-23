@@ -27,7 +27,8 @@ class ProcountorOperations(models.TransientModel):
     procountor_operation = fields.Selection([('import', 'Import')],
                                             string='Procountor Operations', default='import')
     import_operations = fields.Selection(
-        selection=[("import_product", "Import Product"), ("import_customers", "Import Customer")],
+        selection=[("import_product", "Import Product"), ("import_customers", "Import Customer"),
+                   ('import_vats', 'Import Vats')],
         string='Import Operations', default='import_product'
     )
 
@@ -41,10 +42,10 @@ class ProcountorOperations(models.TransientModel):
 
         if self.import_operations == "import_product":
             self.env['procountor.product.listing'].procountor_import_product_list(instance,
-                                                                               self.from_date_product,
-                                                                               self.to_date_product,
-                                                                               self.procountor_product_ids)
+                                                                                  self.from_date_product,
+                                                                                  self.to_date_product,
+                                                                                  self.procountor_product_ids)
         if self.import_operations == "import_customers":
-            print("Customers")
-
-        return True
+            response = self.env['res.partner'].import_customer_procountor_to_odoo(instance)
+        if self.import_operations =='import_vats':
+            response = self.env['procountor.vat.status'].import_vat_settings_procountor_to_odoo(instance)

@@ -1,0 +1,13 @@
+<odoo>
+    <record id="view_account_tax_form_inherit_procountor" model="ir.ui.view">
+        <field name="name">account.tax.form.inherit.procountor</field>
+        <field name="model">account.tax</field>
+        <field name="inherit_id" ref="account.view_tax_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='country_id']" position="after">
+                <field name="procountor_vat_percent_id" options='{"no_open": True, "no_create": True}'/>
+                <field name="procountor_vat_status_id" options='{"no_open": True, "no_create": True}'/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

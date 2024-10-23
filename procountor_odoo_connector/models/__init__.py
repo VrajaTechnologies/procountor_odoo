@@ -4,3 +4,6 @@ from . import procountor_log
 from . import res_partner
 from . import account_move
 from . import product_list
+from . import procountor_vat_status
+from . import procountor_vat_percent
+from . import account_tax
