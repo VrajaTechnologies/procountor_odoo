@@ -12,7 +12,7 @@ class ProcountorLog(models.Model):
         string='Name'
     )
     procountor_operation_name = fields.Selection(
-        selection=[('product', 'Product'), ('customer', 'Customer'),
+        selection=[('product', 'Product'), ('customer', 'Customer'),('vat','Vat'),
                    ('product_attribute', 'Product Attribute'),
                    ('product_variant', 'Product Variant'),
                    ('invoice', 'Invoice')],
@@ -92,7 +92,7 @@ class ProcountorLogLine(models.Model):
         string='Log'
     )
     procountor_operation_name = fields.Selection(
-        selection=[('product', 'Product'), ('customer', 'Customer'),
+        selection=[('product', 'Product'), ('customer', 'Customer'),('vat','Vat'),
                    ('product_attribute', 'Product Attribute'),
                    ('product_variant', 'Product Variant'),
                    ('invoice', 'Invoice')],

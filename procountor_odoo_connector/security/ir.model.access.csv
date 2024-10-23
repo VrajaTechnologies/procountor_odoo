@@ -5,3 +5,5 @@ access_procountor_log_line,procountor_log_line,model_procountor_log_line,base.gr
 access_export_customer_to_procountor,export_customer_to_procountor,model_export_customer_to_procountor,base.group_user,1,1,1,1
 access_procountor_operations,procountor_operations,model_procountor_operations,base.group_user,1,1,1,1
 access_procountor_product_listing,procountor_product_listing,model_procountor_product_listing,base.group_user,1,1,1,1
+access_procountor_vat_percent,procountor_vat_percent,model_procountor_vat_percent,base.group_user,1,1,1,1
+access_procountor_vat_status,procountor_vat_status,model_procountor_vat_status,base.group_user,1,1,1,1

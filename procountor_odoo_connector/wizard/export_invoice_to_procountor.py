@@ -2,17 +2,16 @@ import logging
 import json
 from datetime import datetime
 from odoo import models, fields, _
-from odoo.exceptions import UserError, ValidationError
 
 _logger = logging.getLogger("Procountor")
 
 
-class ExportCustomerToProcountor(models.TransientModel):
+class ExportInvoiceToProcountor(models.TransientModel):
     """
     Model for adding customer into procountor.
     """
-    _name = "export.customer.to.procountor"
-    _description = "Export Customer To Procountor"
+    _name = "export.invoice.to.procountor"
+    _description = "Export Invoice To Procountor"
 
     procountor_instance_id = fields.Many2one("procountor.instance", string="Procountor Instance")
 
@@ -76,65 +75,18 @@ class ExportCustomerToProcountor(models.TransientModel):
         request_data = json.dumps(payload)
         return request_data
 
-    def export_or_update_customer_to_procountor(self):
-        """This method use for export or update customer from odoo to procountor
+    def export_invoice_to_procountor(self):
+        """This method use for export invoice from odoo to procountor
             author - mithilesh lathiya
             """
         procountor_instance = self.procountor_instance_id
-        active_customer_ids = self.env["res.partner"].browse(self._context.get("active_ids", [])).filtered(
-            lambda x: x.company_type == 'company')
+        active_invoice_ids = self.env["account.move"].browse(self._context.get("active_ids", []))
 
-        log_id = self.env['procountor.log'].generate_procountor_logs('customer', 'export', procountor_instance,
+        log_id = self.env['procountor.log'].generate_procountor_logs('invoice', 'export', procountor_instance,
                                                                      'Process Started')
         is_error = False
-        if active_customer_ids:
-            for customer_id in active_customer_ids:
-                customer_api_request_data = self.prepare_customer_api_request_data(customer_id)
-                headers = {
-                    'accept': 'application/json',
-                    'Authorization': 'Bearer {0}'.format(procountor_instance.procountor_api_access_token),
-                    'Content-Type': 'application/json'
-                }
-                api_url = "{0}/businesspartners{1}".format(
-                    self.procountor_instance_id.procountor_api_url,
-                    "/{0}".format(customer_id.procountor_customer_id) if customer_id.procountor_customer_id else ""
-                )
-                request_type = 'PUT' if customer_id.procountor_customer_id else 'POST'
-                try:
-                    response_status, response_data = procountor_instance.procountor_api_calling(request_type, api_url,
-                                                                                                customer_api_request_data,
-                                                                                                headers)
-
-                    if response_status and response_data.get('id'):
-                        customer_id.procountor_customer_id = response_data.get('id')
-                        customer_id.procountor_instance_id = procountor_instance
-                        message = 'Successfully Export Customer To Procountor : {}'.format(
-                            customer_id.name)
-                        self.env['procountor.log.line'].generate_procountor_process_line('customer', 'export',
-                                                                                         procountor_instance,
-                                                                                         message,
-                                                                                         customer_api_request_data, response_data, log_id,
-                                                                                         False)
-                    else:
-                        is_error = True
-                        error_msg = 'Getting some error when try to export customer {} from odoo to procountor.'.format(
-                            customer_id.name)
-                        self.env['procountor.log.line'].generate_procountor_process_line('customer', 'export',
-                                                                                         procountor_instance,
-                                                                                         error_msg,
-                                                                                         customer_api_request_data,
-                                                                                         response_data, log_id,
-                                                                                         True)
-                except Exception as error:
-                    is_error = True
-                    error_msg = 'Getting some error when try to export customer from odoo to procountor.'
-                    self.env['procountor.log.line'].generate_procountor_process_line('customer', 'export',
-                                                                                     procountor_instance,
-                                                                                     error_msg,
-                                                                                     customer_api_request_data, error,
-                                                                                     log_id,
-                                                                                     True)
-
+        if active_invoice_ids:
+            self.env['account.move'].export_invoice_data_odoo_to_procountor(procountor_instance,active_invoice_ids,log_id)
         else:
             is_error = True
             message = "We did not find any customers with the customer type set as 'company'."

@@ -22,6 +22,7 @@
         'wizard/procountor_operations_view.xml',
         'views/procountor_instance.xml',
         'views/menu_item.xml',
+        'views/account_tax.xml'
     ],
 
     # Odoo Store Specific
