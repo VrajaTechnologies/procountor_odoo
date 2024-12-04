@@ -18,6 +18,7 @@
         'views/ir_cron.xml',
         'views/procountor_log.xml',
         'views/res_partner.xml',
+        'views/product_list.xml',
         'wizard/export_customer_to_procountor.xml',
         'wizard/procountor_operations_view.xml',
         'views/procountor_instance.xml',

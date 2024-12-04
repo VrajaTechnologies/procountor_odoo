@@ -43,8 +43,8 @@
                                 <field name="procountor_operation_line_ids" readonly="1">
                                     <tree decoration-danger="fault_operation==True"
                                           decoration-success="fault_operation==False">
-                                        <field name="company_id"/>
-                                        <field name="instance_id"/>
+                                        <field name="procountor_operation_type"/>
+                                        <field name="procountor_operation_name"/>
                                         <field name="fault_operation"/>
                                         <field name="procountor_operation_message"/>
                                     </tree>

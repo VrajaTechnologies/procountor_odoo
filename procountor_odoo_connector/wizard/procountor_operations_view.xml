@@ -15,8 +15,8 @@
                             <ul>
                                 <br/>
                                 <li>
-                                    To Import Products From Procountor Based on From and To Date, It will Create
-                                    Product Inside odoo.
+                                    To Import Products From Procountor to Odoo, If you not set any Product IDs then it
+                                    will fetch all products from Procountor and create Product Inside Odoo.
                                 </li>
                                 <li>
                                     If any Issue in Process of Product Import We manage the Logs.
@@ -27,8 +27,8 @@
                                 <ul>
                                     <br/>
                                     <li>
-                                        To Import Products Based on Specify Procountor IDs
-                                        Example of Enter procountor product template ids:
+                                        To Import Products Based on Specific Procountor Product IDs<br/>
+                                        Example of Enter procountor product ids comma separated:
                                         2170456,2170843,2170849,2170856
                                     </li>
                                     <li>
@@ -36,8 +36,7 @@
                                     </li>
                                     <li>
                                         Please Enter procountor product ids with comma separated values without
-                                        any
-                                        quotes.
+                                        any quotes.
                                     </li>
                                 </ul>
                             </p>
@@ -61,12 +60,6 @@
                             </group>
                             <group>
                                 <!-- Import Product fields -->
-                                <field name="from_date_product"
-                                       required="import_operations == 'import_product'"
-                                       invisible="procountor_operation != 'import' or import_operations != 'import_product'"/>
-                                <field name="to_date_product"
-                                       required="import_operations == 'import_product'"
-                                       invisible="procountor_operation != 'import' or import_operations != 'import_product'"/>
                                 <field name="procountor_product_ids"
                                        invisible="procountor_operation != 'import' or import_operations != 'import_product'"/>
                                 />

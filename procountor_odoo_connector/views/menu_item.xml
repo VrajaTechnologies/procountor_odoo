@@ -20,6 +20,13 @@
                   action="procountor_res_partner_action"
                   sequence="0"/>
 
+        <!-- Product Menu -->
+        <menuitem id="product_menu"
+                  name="Products"
+                  parent="procountor_odoo_connector.procountor_instance"
+                  action="action_procountor_product_listing"
+                  sequence="1"/>
+
         <!-- Log Menu & it's Items -->
         <menuitem id="log_menu_of_procountor"
                   name="Log"

@@ -1,6 +1,5 @@
 import logging
-from odoo import models, fields, _, api
-from odoo.exceptions import ValidationError
+from odoo import models, fields
 
 _logger = logging.getLogger("Procountor")
 
@@ -10,7 +9,7 @@ class ProcountorVatStatus(models.Model):
     _description = 'Procountor Vat Status'
     _rec_name = "procountor_vat_description"
 
-    procountor_vat_status = fields.Float(string="Procountor Vat Status", copy=False,
+    procountor_vat_status = fields.Integer(string="Procountor Vat Status", copy=False,
                                          help="Procountor Vat Status")
     procountor_vat_description = fields.Char(string="Procountor Vat Description", copy=False,
                                              help="Procountor Vat Description")
