@@ -53,7 +53,7 @@ class ExportCustomerToProcountor(models.TransientModel):
             },
             "paymentInfo": {
                 "paymentMethod": customer_id.procountor_payment_method or '',
-                # "bankAccount": customer_id.bank_ids and customer_id.bank_ids.mapped('acc_number')[0] or '',
+                "bankAccount": customer_id.bank_ids and customer_id.bank_ids.mapped('acc_number')[0] or '',
                 "currency": customer_id.currency_id.name if customer_id.currency_id else customer_id.property_product_pricelist.currency_id.name
             },
             "registryInfo": {
@@ -76,15 +76,22 @@ class ExportCustomerToProcountor(models.TransientModel):
         request_data = json.dumps(payload)
         return request_data
 
-    def export_or_update_customer_to_procountor(self):
+    def export_or_update_customer_to_procountor(self,procountor_instance=False,partner_id=False,log_id=False):
         """This method use for export or update customer from odoo to procountor
             author - mithilesh lathiya
             """
-        procountor_instance = self.procountor_instance_id
-        active_customer_ids = self.env["res.partner"].browse(self._context.get("active_ids", [])).filtered(
-            lambda x: x.company_type == 'company')
 
-        log_id = self.env['procountor.log'].generate_procountor_logs('customer', 'export', procountor_instance,
+        procountor_instance = procountor_instance if procountor_instance else self.procountor_instance_id
+        if partner_id:
+            if partner_id.company_type == 'company':
+                active_customer_ids = [partner_id]
+            else:
+                active_customer_ids = False
+        else:
+            active_customer_ids = self.env["res.partner"].browse(self._context.get("active_ids", [])).filtered(
+                lambda x: x.company_type == 'company')
+
+        log_id = log_id if log_id else self.env['procountor.log'].generate_procountor_logs('customer', 'export', procountor_instance,
                                                                      'Process Started')
         is_error = False
         if active_customer_ids:
@@ -96,7 +103,7 @@ class ExportCustomerToProcountor(models.TransientModel):
                     'Content-Type': 'application/json'
                 }
                 api_url = "{0}/businesspartners{1}".format(
-                    self.procountor_instance_id.procountor_api_url,
+                    procountor_instance.procountor_api_url,
                     "/{0}".format(customer_id.procountor_customer_id) if customer_id.procountor_customer_id else ""
                 )
                 request_type = 'PUT' if customer_id.procountor_customer_id else 'POST'
@@ -135,6 +142,7 @@ class ExportCustomerToProcountor(models.TransientModel):
                                                                                      log_id,
                                                                                      True)
 
+
         else:
             is_error = True
             message = "We did not find any customers with the customer type set as 'company'."
@@ -156,3 +164,5 @@ class ExportCustomerToProcountor(models.TransientModel):
         log_id.procountor_operation_message = 'Process Has Been Finished'
         if not log_id.procountor_operation_line_ids:
             log_id.unlink()
+
+

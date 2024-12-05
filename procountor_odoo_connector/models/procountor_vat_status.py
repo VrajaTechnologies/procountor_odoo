@@ -10,8 +10,8 @@ class ProcountorVatStatus(models.Model):
     _description = 'Procountor Vat Status'
     _rec_name = "procountor_vat_description"
 
-    procountor_vat_status = fields.Float(string="Procountor Vat Status", copy=False,
-                                         help="Procountor Vat Status")
+    procountor_vat_status = fields.Integer(string="Procountor Vat Status", copy=False,
+                                           help="Procountor Vat Status")
     procountor_vat_description = fields.Char(string="Procountor Vat Description", copy=False,
                                              help="Procountor Vat Description")
 
@@ -64,7 +64,8 @@ class ProcountorVatStatus(models.Model):
                             vat_status_id = self.create(
                                 {'procountor_vat_status': vat_status.get('vatStatus'),
                                  'procountor_vat_description': vat_status.get('description')})
-                            message = 'Vat Status {0} Created Successfully In Odoo.'.format(vat_status.get('vatStatus'))
+                            message = 'Vat Status {0} -{1} Created Successfully In Odoo.'.format(
+                                vat_status.get('vatStatus'), vat_status.get('description'))
                             self.env['procountor.log.line'].generate_procountor_process_line('vat', 'import',
                                                                                              instance, message, False,
                                                                                              response_data, log_id,

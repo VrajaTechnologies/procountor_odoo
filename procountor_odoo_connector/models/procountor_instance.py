@@ -78,6 +78,10 @@ class ProcountorInstance(models.Model):
         copy=False,
         tracking=True
     )
+    journal_id = fields.Many2one('account.journal', string='Journal', copy=False,
+                                 help="Please select appropriate journal", tracking=True)
+    invoice_payment_days_limit = fields.Integer(string="Invoice Payment Day Limit", copy=False, tracking=True,default="5",
+                                                help="To fetch payments, please enter the number of days. Based on the entered value, we will retrieve payments from the specified number of previous days up to the current date.")
 
     @api.model_create_multi
     def create(self, vals):
@@ -87,6 +91,7 @@ class ProcountorInstance(models.Model):
         instance = super(ProcountorInstance, self).create(vals)
         instance.generate_procountor_access_token()
         instance.generate_procountor_access_token_using_cron()
+        instance.fetch_procountor_invoice_payment_using_cron()
         return instance
 
     def procountor_api_calling(self, request_type, api_url, request_data, header):
@@ -102,6 +107,7 @@ class ProcountorInstance(models.Model):
             return True, response_data
         else:
             return False, response_data.json()
+
     def setup_procountor_automation_cron(self, cron_name, model_name, code_method, interval_number=10,
                                          interval_type='minutes', numbercall=1, nextcall_timegap_minutes=10):
         """
@@ -136,6 +142,18 @@ class ProcountorInstance(models.Model):
         model_name = 'procountor.instance'
         self.setup_procountor_automation_cron(cron_name, model_name, code_method,
                                               interval_type='minutes', interval_number=55,
+                                              numbercall=-1, nextcall_timegap_minutes=20)
+        return True
+
+    def fetch_procountor_invoice_payment_using_cron(self):
+        code_method = 'model.fetch_invoice_payment_procountor_to_odoo({0})'.format(self.id)
+        existing_cron = self.env['ir.cron'].search([('code', '=', code_method), ('active', 'in', [True, False])])
+        if existing_cron:
+            return True
+        cron_name = "Procountor: [{0}] Fetch Invoice's Payments".format(self.name)
+        model_name = 'account.move'
+        self.setup_procountor_automation_cron(cron_name, model_name, code_method,
+                                              interval_type='hours', interval_number=1,
                                               numbercall=-1, nextcall_timegap_minutes=20)
         return True
 

@@ -1,0 +1,22 @@
+<odoo>
+    <record id="export_invoice_to_procountor_from_view" model="ir.ui.view">
+        <field name="name">Export Invoice</field>
+        <field name="model">export.invoice.to.procountor</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <p>Please click on the 'Export Invoice' button to export the invoice to procountor
+                    </p>
+                    <group>
+                        <field name="procountor_instance_id" required="1"/>
+                    </group>
+                    <footer>
+                        <button string="Export Invoice" class="oe_highlight" type="object"
+                                name="export_invoice_to_procountor"/>
+                        <button string="Cancel" class="oe_highlight" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
