@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="account_move_view_form_inherited_procountor" model="ir.ui.view">
+            <field name="name">Account Move View Form Inherited</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position='inside'>
+                    <page string="Procountor Information">
+                        <group>
+                            <!--                            <group>-->
+                            <!--                                <field name="procountor_bank_reference_code_type"/>-->
+                            <!--                                <field name="procountor_clearing_code"/>-->
+                            <!--                                <field name="procountor_accounting_by_row"/>-->
+                            <!--                                <field name="procountor_unit_prices_include_vat"/>-->
+                            <!--                                <field name="procountor_vat_status_id"/>-->
+                            <!--                                <field name="procountor_delivery_method"/>-->
+                            <!--                                <field name="procountor_invoice_channel"/>-->
+                            <!--                            </group>-->
+                            <group string="Configuration" name="Procountor Configuration">
+                                <field name="procountor_bank_reference_code_type"/>
+                                <field name="procountor_clearing_code"/>
+                                <field name="procountor_accounting_by_row"/>
+                                <field name="procountor_unit_prices_include_vat"/>
+                                <field name="procountor_vat_status_id"/>
+                                <field name="procountor_delivery_method"/>
+                                <field name="procountor_invoice_channel"/>
+                            </group>
+                            <group string="Procountor Details">
+                                <field name="procountor_instance_id" readonly="1"/>
+                                <field name="export_invoice_to_procountor" readonly="1"/>
+                                <field name="procountor_invoice_id" readonly="1"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        <!-- Action for export customer-->
+        <record id="action_wizard_export_invoice_to_procountor" model="ir.actions.act_window">
+            <field name="name">Export Invoice To Procountor</field>
+            <field name="res_model">export.invoice.to.procountor</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="model_account_move"/>
+            <field name="binding_view_types">list,form</field>
+        </record>
+    </data>
+</odoo>

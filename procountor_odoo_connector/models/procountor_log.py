@@ -15,7 +15,7 @@ class ProcountorLog(models.Model):
         selection=[('product', 'Product'), ('customer', 'Customer'),('vat','Vat'),
                    ('product_attribute', 'Product Attribute'),
                    ('product_variant', 'Product Variant'),
-                   ('invoice', 'Invoice')],
+                   ('invoice', 'Invoice'),('payment','Payment')],
         string="Process Name")
     procountor_operation_type = fields.Selection(
         selection=[('export', 'Export'), ('import', 'Import'),
@@ -95,7 +95,7 @@ class ProcountorLogLine(models.Model):
         selection=[('product', 'Product'), ('customer', 'Customer'),('vat','Vat'),
                    ('product_attribute', 'Product Attribute'),
                    ('product_variant', 'Product Variant'),
-                   ('invoice', 'Invoice')],
+                   ('invoice', 'Invoice'),('payment','Payment')],
         string="Process Name"
     )
     procountor_operation_type = fields.Selection(
